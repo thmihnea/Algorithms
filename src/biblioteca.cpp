@@ -1,74 +1,24 @@
 #include <iostream>
-#include <fstream>
 #include <vector>
 #include <cstring>
 #include <cmath>
 #include <string>
+#include <stdlib.h>
 
-/*
-	Definim cartea nula in cazul in care intampinam
-	erori atunci cand dorim sa cautam o carte
-	in vector si nu o gasim.
-*/
 #define NULL_CARTE carte("", 0, 0, "");
-
-/*
-	Definim index-ul nul in cazul in care intampinam
-	erori atunci cand nu gasim index-ul cartii
-	respective.
-*/
 #define NULL_INDEX -1
-
-/*
-	Definim un numar foarte mare pentru a putea
-	calcula diferentele intre pagini si ID-ul
-	unei carti. Folosim aceasta definitie pentru
-	evitarea utilizarii unui numar precum
-	2.000.000.000 etc.
-*/
 #define HUGE 1e+300;
 
 using namespace std;
 
-/*
-	Definim metodele/functiile prin care executam
-	citirea si scrierea in fisiere.
-*/
-ifstream fin("intrare.txt");
-ofstream fout("iesire.txt");
-
-/*
-	Structura carte responsabila pentru manipularea
-	fiecarei carti in parte.
-*/
 struct carte {
 
-	/*
-		Campurile private ale cartii. Aici retinem informatii
-		despre titlul cartii, numarul de pagini, ID-ul cartii si
-		respectiv numele autorului.
-		Le mentinem private intrucat arata urat daca apelam <carte>.titlu :)
-		Singurul mod in care pot fi manipulate direct este prin
-		reflection.
-	*/
 private:
 	string titlu, nume;
 	int pagini, id;
 
-	/*
-		Campurile publice ale cartii. Sunt constituite din
-		metode care manipuleaza campurile private.
-	*/
 public:
 
-	/*
-		Constructorul cartii.
-		Trebuie specificate argumentele:
-		@param titlu - titlul cartii
-		@param pagini - numarul de pagini
-		@param id - ID-ul cartii in biblioteca
-		@param nume - numele autorului
-	*/
 	carte(string titlu, int pagini, int id, string nume) {
 		this->titlu = titlu;
 		this->pagini = pagini;
@@ -76,41 +26,22 @@ public:
 		this->nume = nume;
 	}
 
-	/*
-		Metoda pentru a obtine titlul cartii.
-	*/
 	string get_titlu() {
 		return this->titlu;
 	}
 
-	/*
-		Metoda pentru a obtine numarul de pagini
-		din carte.
-	*/
 	int get_pagini() {
 		return this->pagini;
 	}
 
-	/*
-		Metoda pentru a obtine ID-ul cartii
-		din biblioteca.
-	*/
 	int get_id() {
 		return this->id;
 	}
 
-	/*
-		Metoda pentru a obtine numele cartii.
-		Utilizam un pointer pentru simplicitate.
-	*/
 	string get_nume() {
 		return this->nume;
 	}
 
-	/*
-		Metoda pentru a verifica daca doua carti
-		sunt egale (ca obiecte ale structurii carte).
-	*/
 	bool equals(carte c) {
 		return ((this->titlu == c.get_titlu())
 			&& (this->nume == c.get_nume())
@@ -118,82 +49,37 @@ public:
 			&& (this->pagini == c.get_pagini()));
 	}
 
-	/*
-		Metoda pentru a seta titlul
-		unei carti daca dorim sa il editam.
-	*/
 	void set_titlu(string titlu) {
 		this->titlu = titlu;
 	}
 
-	/*
-		Metoda pentru a seta numarul de pagini
-		ale cartii daca dorim sa il editam.
-	*/
 	void set_pagini(int pagini) {
 		this->pagini = pagini;
 	}
 
-	/*
-		Metoda pentru a seta ID-ul unei carti
-		daca dorim sa il editam.
-	*/
 	void set_id(int id) {
 		this->id = id;
 	}
 
-	/*
-		Metoda pentru a seta numele autorului
-		unei carti.
-	*/
 	void set_nume(string nume) {
 		this->nume = nume;
 	}
 };
 
-/*
-	Structura responsabila pentru obiectul
-	biblioteca din sursa.
-*/
 struct biblioteca {
-	/*
-		Campurile private ale bibliotecii.
-		Folosim un vector de carti pentru a le tine in
-		memorie si respectiv un int care se
-		refera la numarul de carti aflate in
-		biblioteca.
-		(Se poate utiliza is vec.size())
-	*/
 private:
 	vector<carte> carti;
 	int size_biblioteca;
 public:
 
-	/*
-		Constructorul bibliotecii.
-		Simplist, doar initializeaza numarul
-		de carti din biblioteca cu 0.
-	*/
 	biblioteca() {
 		this->size_biblioteca = 0;
 	}
 
-	/*
-		Metoda folosita pentru a returna
-		vectorul care contine toate cartile
-		din biblioteca.
-	*/
 	vector<carte> get_carti() {
 		return this->carti;
 	}
 
-	/*
-		Metoda folosita pentru a returna
-		un vector care contine toate cartile
-		scrise de un anumit autor.
-		@param autor[32] - autorul dupa care
-		initiem cautarea
-	*/
 	vector<carte> get_carti_by_autor(string autor) {
 		vector<carte> carti_by_autor;
 		int gasite = 0;
@@ -207,13 +93,6 @@ public:
 		return carti_by_autor;
 	}
 
-	/*
-		Metoda folosita pentru a returna
-		un vector care contine toate cartile
-		care au un anumit numar de pagini.
-		@param pagini - numarul de pagini dupa
-		care initiem cautarea
-	*/
 	vector<carte> get_carti_by_pagini(int pagini) {
 		vector<carte> carti_by_pagini;
 		int gasite = 0;
@@ -233,38 +112,18 @@ public:
 		return carti_by_pagini;
 	}
 
-	/*
-		Metoda folosita pentru a returna
-		cartea care are un anumit ID. Ne folosim
-		de cautarea binara pentru o complexitate
-		mai mica.
-
-		@param id - ID-ul dupa care cautam
-		@param leftbound - partea din stanga
-		@param rightbound - partea din dreapta
-	*/
-	carte get_carte_by_id(int id, int leftbound, int rightbound) {
-		if (leftbound > rightbound) {
-			cout << "Nu a putut fi gasita o carte cu ID-ul " << id << "." << endl;
-			this->get_carte_with_closest_id_to(id);
-			return NULL_CARTE;
+	carte get_carte_by_id(unsigned int id) {
+		for (int i = 0; i < this->carti.size(); i++) {
+			carte c = this->carti[i];
+			if (c.get_id() == id) {
+				return c;
+				break;
+			}
 		}
-		else {
-			int middle = (leftbound + rightbound) / 2;
-			if (this->carti[middle].get_id() == id)
-				return this->carti[middle];
-			if (id < this->carti[middle].get_id())
-				return get_carte_by_id(id, leftbound, middle - 1);
-			else
-				return get_carte_by_id(id, middle + 1, rightbound);
-		}
+		cout << "Nu a putut fi gasita o carte cu ID-ul " << id << "." << endl;
+		return NULL_CARTE;
 	}
 
-	/*
-		Metoda utilizata pentru a returna
-		cartea cu numarul de pagini cel mai apropiat
-		de parametrul specificat.
-	*/
 	carte get_carte_with_closest_pages_to(int pagini) {
 		int diferenta_minima = HUGE;
 		int index = 0;
@@ -281,11 +140,6 @@ public:
 		return c;
 	}
 
-	/*
-		Metoda utilizata pentru a returna
-		cartea cu ID-ul cel mai apropiat de
-		parametrul specificat.
-	*/
 	carte get_carte_with_closest_id_to(int id) {
 		int diferenta_minima = HUGE;
 		int index = 0;
@@ -302,28 +156,14 @@ public:
 		return c;
 	}
 
-	/*
-		Metoda utilizata pentru a returna o carte
-		dupa un anumit index din vector.
-	*/
 	carte get_carte_by_index(int index) {
 		return this->carti[index];
 	}
 
-	/*
-		Metoda utilizata pentru a returna
-		spatiul pe care il ocupa cartile
-		in biblioteca (numarul de carti din
-		biblioteca).
-	*/
 	int get_spatiu_biblioteca() {
 		return this->size_biblioteca;
 	}
 
-	/*
-		Metoda utilizata pentru a returna
-		index-ul unei anumite carti din vector.
-	*/
 	int get_index(carte c) {
 		for (int i = 0; i < this->size_biblioteca; i++) {
 			if (this->carti[i].equals(c)) return i;
@@ -331,38 +171,33 @@ public:
 		return NULL_INDEX;
 	}
 
-	/*
-		Metoda folosita pentru a adauga
-		o carte in vector.
-		In acelasi timp, se incrementeaza
-		spatiul/numarul de carti
-		din biblioteca.
-	*/
 	void add_carte(carte c) {
 		this->carti.push_back(c);
 		this->size_biblioteca++;
 	}
 
-	/*
-		Metoda folosita pentru a sterge
-		o carte din vector.
-		In acelasi timp, decrementam spatiul/
-		numarul de carti din biblioteca.
-	*/
 	void remove_carte(carte c) {
 		if (get_index(c) == NULL_INDEX) return;
 		this->remove_carte_at(get_index(c));
 	}
 
-	/*
-		Metoda utilizata pentru stergerea unei
-		carti de la o anumita pozitie
-		din biblioteca.
-	*/
 	void remove_carte_at(int index) {
 		if (index > this->size_biblioteca) return;
 		this->carti.erase(this->carti.begin() + index);
 		this->size_biblioteca--;
+	}
+
+	void remove_all() {
+		if (this->carti.size() == 0) return;
+		this->carti.erase(this->carti.begin(), this->carti.end());
+	}
+
+	bool id_already_exists(int id) {
+		for (int i = 0; i < this->carti.size(); i++) {
+			carte c = this->carti[i];
+			if (c.get_id() == id) return true;
+		}
+		return false;
 	}
 };
 
@@ -392,48 +227,18 @@ vector<string> titles, authors;
 vector<int> pages, ids;
 biblioteca b = biblioteca();
 
-void setup_carti() {
-	string word;
-	int i = 1;
-	while (fin >> word) {
-		switch (i) {
-		case 1:
-			titles.push_back(word);
-			i++;
-			break;
-		case 2:
-			pages.push_back(string_to_int(word));
-			i++;
-			break;
-		case 3:
-			ids.push_back(string_to_int(word));
-			i++;
-			break;
-		case 4:
-		default:
-			authors.push_back(word);
-			i = 1;
-			break;
-		}
-	}
-}
-
-void setup_biblioteca() {
-	for (int i = 0; i < titles.size(); i++) {
-		carte c = carte(titles[i], pages[i], ids[i], authors[i]);
-		b.add_carte(c);
-	}
-}
-
 void afisare_numar_carti() {
 	cout << "Aceasta biblioteca contine un numar de: " << b.get_spatiu_biblioteca() << " carti!" << endl;
 }
 
 void afisare_carti() {
+	int gasite = 0;
 	for (int i = 0; i < b.get_carti().size(); i++) {
 		carte c = b.get_carte_by_index(i);
 		cout << "Cartea #" << (i + 1) << " -> " << '"' << c.get_titlu() << '"' << ", scrisa de " << c.get_nume() << " (" << c.get_pagini() << " pagini - ID: " << c.get_id() << ")" << endl;
+		gasite++;
 	}
+	if (gasite == 0) cout << "Nu a fost gasita nicio carte in biblioteca!";
 }
 
 bool contains(vector<string> v, string s) {
@@ -450,10 +255,13 @@ void afisare_autori() {
 		if (!contains(autori, c.get_nume())) autori.push_back(c.get_nume());
 	}
 	cout << "Autorii din biblioteca sunt: ";
+	int gasiti = 0;
 	for (int i = 0; i < autori.size(); i++) {
 		if (i == autori.size() - 1) cout << autori[i] << "." << endl;
 		else cout << autori[i] << ", ";
+		gasiti++;
 	}
+	if (gasiti == 0) cout << "- (NICIUN AUTOR NU A FOST GASIT - BIBLIOTECA GOALA?)";
 }
 
 void afisare_cea_mai_apropiata_de_id(int id) {
@@ -464,26 +272,155 @@ void afisare_cea_mai_apropiata_de_pagini(int pagini) {
 	b.get_carte_with_closest_pages_to(pagini);
 }
 
-void afisare_carti_dupa_autor(string autor) {
-	b.get_carti_by_autor(autor);
+void cleanup_console() {
+	system("CLS");
 }
 
-/*
-	Functia main din programul
-	nostru.
-*/
+void display_message() {
+	cout << "Bun venit in meniu!" << endl << "Acesta poate fi utilizat cu urmatoarele controale:" << endl
+		<< "TASTA 0 -> Opreste executia programului" << endl
+		<< "TASTA 1 -> Adauga/inregistreaza noi carti in biblioteca" << endl
+		<< "TASTA 2 -> Afiseaza autorii disponibili din biblioteca" << endl
+		<< "TASTA 3 -> Afiseaza toate cartile disponibile in biblioteca" << endl
+		<< "TASTA 4 -> Cauta o carte dupa un anumit ID" << endl
+		<< "TASTA 5 -> Cauta o carte dupa un anumit numar de pagini" << endl
+		<< "TASTA 6 -> Afiseaza toate cartile scrise de un autor" << endl
+		<< "TASTA 7 -> Initializeaza biblioteca (adaugand cartile deja inregistrate la cu ajutorul tastei 1)" << endl
+		<< "Alege o optiune: ";
+	return;
+}
 
-int main(void) {
-	/*
-		Cateva metode pentru testarea
-		structurii de date.
-	*/
-	setup_carti();
-	setup_biblioteca();
+void afisare_carte(carte c) {
+	cout << "################################"
+		<< endl
+		<< "Se afiseaza detalii despre carte:" << endl
+		<< "Titlu: " << c.get_titlu() << endl
+		<< "Autor: " << c.get_nume() << endl
+		<< "Numar de pagini: " << c.get_pagini() << endl
+		<< "ID: #" << c.get_id() << endl
+		<< "################################";
+}
+
+void afisare_carti_dupa_autor() {
+	string autor;
+	cout << "Introdu numele autorului dupa care doresti sa cauti: " << endl;
+	cin >> autor;
+	vector<carte> v = b.get_carti_by_autor(autor);
+	for (int i = 0; i < v.size(); i++) {
+		afisare_carte(v[i]);
+	}
+}
+
+void register_book() {
+	string titlu, autor;
+	int pagini, id;
+	cout << "################################" << endl;
+	cout << "Titlul cartii: ";
+	cin >> titlu;
+	cout << "Autorul cartii: ";
+	cin >> autor;
+	cout << "Numarul de pagini ale cartii: ";
+	cin >> pagini;
+	cout << "ID-ul cartii: ";
+	cin >> id;
+	cout << "################################";
+	if (b.id_already_exists(id)) {
+		cout << endl << "O carte cu acest ID deja exista! Te rog sa introduci iar detaliile cartii.";
+		register_book();
+	}
+	else {
+		titles.push_back(titlu);
+		authors.push_back(autor);
+		pages.push_back(pagini);
+		ids.push_back(id);
+	}
+}
+
+void cauta_dupa_id() {
+	int id;
+	cout << endl << "Introdu ID-ul dupa care doresti sa executi query-ul: ";
+	cin >> id;
+	carte c = b.get_carte_by_id(id);
+	if (c.get_id() == 0)
+		return;
+	afisare_carte(c);
+}
+
+void cauta_dupa_pagini() {
+	int pagini;
+	cout << endl << "Introdu numarul de pagini dupa care doresti sa executi query-ul: " << endl;
+	cin >> pagini;
+	vector<carte> gasite = b.get_carti_by_pagini(pagini);
+	for (int i = 0; i < gasite.size(); i++)
+		afisare_carte(gasite[i]);
+}
+
+void register_books() {
+	cout << endl << "Introdu numarul de carti pe care doresti sa-l adaugi in biblioteca: ";
+	int n;
+	cin >> n;
+	string titlu, autor;
+	int pagini, id;
+	int i = 0;
+	for (i = 0; i < n; i++) {
+		register_book();
+	}
+}
+
+void setup_biblioteca() {
+	//auto start = chrono::system_clock::now();
+	b.remove_all();
+	for (int i = 0; i < titles.size(); i++) {
+		carte c = carte(titles[i], pages[i], ids[i], authors[i]);
+		b.add_carte(c);
+	}
+	//auto end = chrono::system_clock::now();
+	//std::chrono::duration<double> elapsed_seconds = end - start;
+	cout << "Cartile au fost inregistrare cu succes in biblioteca!" << endl;
 	afisare_numar_carti();
 	afisare_carti();
-	afisare_autori();
-	afisare_cea_mai_apropiata_de_id(199);
-	afisare_cea_mai_apropiata_de_pagini(300);
-	afisare_carti_dupa_autor("Pop");
+}
+
+void pause() {
+	cout << endl << "Acest mesaj se va sterge automat dupa 5 secunde.";
+	_sleep(5000);
+}
+
+void init() {
+	display_message();
+	int option;
+	cin >> option;
+	while (option != 0) {
+		switch (option) {
+		case 1:
+			register_books();
+			break;
+		case 2:
+			afisare_autori();
+			break;
+		case 3:
+			afisare_carti();
+			break;
+		case 4:
+			cauta_dupa_id();
+			break;
+		case 5:
+			cauta_dupa_pagini();
+			break;
+		case 6:
+			afisare_carti_dupa_autor();
+			break;
+		case 7:
+			setup_biblioteca();
+			break;
+		}
+		pause();
+		cleanup_console();
+		display_message();
+		cin >> option;
+	}
+}
+
+int main(void) {
+	init();
 }
