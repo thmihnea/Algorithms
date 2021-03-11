@@ -57,6 +57,8 @@ void solve(int cerinta) {
             cout << longest;
             break;
         case 2:
+            vector<string> v = get_interesante();
+            cout << v.size() << endl;
             for (auto &s : get_interesante())
                 cout << s << endl;
             break;
