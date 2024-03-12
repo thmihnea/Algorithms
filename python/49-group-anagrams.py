@@ -9,7 +9,7 @@ class Solution:
             structure for our dictionary keys - thus, we utilize a string.
             """
             table: dict = dict()
-
+            
             # Build frequency table.
             for char in s:
                 table[char] = 1 if char not in table else table[char] + 1
