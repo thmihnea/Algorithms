@@ -7,6 +7,7 @@ class Solution:
     def mergeKLists(self, lists: list[ListNode]) -> ListNode:
 
         # Convert linked-list into a list of integers utility function.
+        # Test change.
         def retrieve(head: ListNode) -> list[int]:
             solution: list[int] = []
             while head is not None:
