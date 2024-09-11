@@ -28,8 +28,6 @@ class Solution:
             return False
         
         _found: int = found
-        
-        
         if path[found] == node.val:
             _found += 1
         
@@ -43,7 +41,6 @@ class Solution:
 
     def isSubPath(self, head: Optional[ListNode], root: Optional[TreeNode]) -> bool:
         _list: List[int] = self._to_list(head)
-        
         
         def dfs(node: Optional[TreeNode]) -> bool:
             if node is None:
