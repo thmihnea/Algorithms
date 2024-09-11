@@ -39,7 +39,6 @@ class Solution:
         if _found == len(path):
             return True
         
-        
         return self._exists_path(path, node.left, _found) or self._exists_path(path, node.right, _found)
 
     def isSubPath(self, head: Optional[ListNode], root: Optional[TreeNode]) -> bool:
@@ -54,6 +53,5 @@ class Solution:
                 return True
             
             return dfs(node.left) or dfs(node.right)
-        
         
         return dfs(root)
