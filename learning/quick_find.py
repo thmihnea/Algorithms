@@ -7,7 +7,7 @@ class UnionFind(object):
     def __init__(self, n: int):
         # Initialize a list of IDs. This will construct
         # 'n' separate objects with no external connections.
-        self._id = [i for i in range(n)]
+        self._id: List[int] = [i for i in range(n)]
         self._size = n
     
     def connected(self, p: int, q: int) -> bool:
