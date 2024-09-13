@@ -57,11 +57,14 @@ class BinaryHeap(object):
     
     def _swim(self, node: int):
         # Moves up a node until it is smaller than its parent.
+        # Happens when it is bigger than its parent.
         while node > 1 and self.heap[node] > self.heap[node // 2]:
             self._swap(node, node // 2)
             node = node // 2
 
     def _sink(self, node: int):
+        # Moves down a node until it respects heap-ordering.
+        # Happens when it is smaller than its children.
         while 2 * node <= self.size:
             j: int = 2 * node
             if self.heap[j + 1] is not None and self.heap[j] > self.heap[j + 1]:

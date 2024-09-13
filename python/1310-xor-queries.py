@@ -12,7 +12,9 @@ class Solution:
         results: List[int] = []
         for query in queries:
             subarray: List[int] = arr[query[0]:query[1] + 1]
-            xor: int = subarray[0]
-            for i in range(1, len(subarray)):
-                xor = xor ^ subarray[i]
-            results.append(xor)
+            results.append(self.xor_array(
+                arr=subarray,
+                low=0,
+                high=len(subarray) - 1
+            ))
+        return results

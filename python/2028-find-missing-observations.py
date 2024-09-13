@@ -15,3 +15,5 @@ class Solution:
     def missingRolls(self, rolls: List[int], mean: int, n: int) -> List[int]:
         total_sum = mean * (n + len(rolls))
         rolls_sum = sum(rolls)
+        sol = []
+        self._backtrack(total_sum - rolls_sum, sol)

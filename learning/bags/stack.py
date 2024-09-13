@@ -4,7 +4,7 @@ class Node(object):
         self.value = value
         self.next = next
 
-class LinkedStack(object):
+class Stack(object):
     # Stack object implemented using a linked list.
     # This is faster because we do not have to use
     # array resizing, but it uses more memory.
