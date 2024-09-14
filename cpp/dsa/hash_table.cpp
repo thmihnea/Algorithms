@@ -1,5 +1,5 @@
 #include <iostream>
-#include <functional>
+#include <optional>
 #include <string>
 
 #define INITIAL_HASH_SIZE 2
@@ -132,7 +132,12 @@ public:
             }
             current = current->GetNext();
         }
-        throw std::runtime_error("Key was not found!");
+        return std::nullopt;
+    }
+
+    bool contains(const K& key)
+    {
+        return this->get(key) != std::nullopt;
     }
 
     void put(const K& key, const V& value) 
