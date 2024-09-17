@@ -90,6 +90,39 @@ class MinimumSpanningTree(object):
 
     def weight(self) -> float:
         pass
+
+class PrimMST(MinimumSpanningTree):
+
+    # We take all the edges in ascending order.
+    # We now add an edge iff only one of its vertices
+    # belongs to the MST.
+
+    def __init__(self, graph: Graph):
+        self._graph: Graph = graph
+        self._mst: List[Edge] = []
+        self._edges: List[Edge] = []
+        heapq.heapify(self._edges)
+
+        self.visited: List[bool] = [False for _ in range(graph.size())]
+        self.visit(0)
+
+        while len(self._edges) > 0:
+            edge: Edge = heapq.heappop(self._edges)
+            v: int = edge.either()
+            w: int = edge.other(v)
+            if self.visited[v] and self.visited[w]:
+                continue
+            self._mst.insert(0, edge)
+            if not self.visited[v]:
+                self.visit(v)
+            if not self.visited[w]:
+                self.visit(w)
+
+    def visit(self, v: int):
+        self.visited[v] = True
+        for entry in self._graph.edges(v):
+            if not self.visited[entry.other(v)]:
+                heapq.heappush(self._edges, entry)
     
 class KruskalMST(MinimumSpanningTree):
 
