@@ -54,3 +54,13 @@ class ShortestPath(object):
             stack.put(edge)
             edge = self.edge_to[edge._from()]
         return stack
+    
+    def _relax(self, edge: DirectedEdge):
+        # Relaxes an edge. If we find that an edge
+        # provides a lesser path from v -> w, we relax it
+        # by updating dist_to and edge_to.
+        v: int = edge._from()
+        w: int = edge._to()
+        if self.dist_to[w] > self.dist_to[v] + edge.weight():
+            self.dist_to[w] = self.dist_to[v] + edge.weight
+            self.edge_to[w] = edge
