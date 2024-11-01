@@ -2,6 +2,7 @@
 #include <condition_variable>
 #include <functional>
 #include <mutex>
+#include <future>
 
 std::mutex gMutex;
 std::condition_variable gCdVar;

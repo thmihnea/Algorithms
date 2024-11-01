@@ -14,5 +14,5 @@ class Solution:
                 result = max(result, table[entry])
             else:
                 table[entry] = 1
-        
+
         return result

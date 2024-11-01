@@ -1,9 +1,12 @@
 #include <functional>
 #include <mutex>
 #include <condition_variable>
+#include <future>
 
 std::mutex gMutex;
 std::condition_variable gCdVar;
+
+std::future_status status;
 
 class H2O {
 private:
